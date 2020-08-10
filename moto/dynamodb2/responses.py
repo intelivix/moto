@@ -764,7 +764,6 @@ class DynamoHandler(BaseResponse):
         condition_expression = self.body.get("ConditionExpression")
         expression_attribute_names = self.body.get("ExpressionAttributeNames", {})
         expression_attribute_values = self.body.get("ExpressionAttributeValues", {})
-
         try:
             item = self.dynamodb_backend.update_item(
                 name,
@@ -784,7 +783,7 @@ class DynamoHandler(BaseResponse):
             return self.error(
                 er, "A condition specified in the operation could not be evaluated."
             )
-        except TypeError:
+        except (TypeError, AssertionError):
             er = "com.amazonaws.dynamodb.v20111205#ValidationException"
             return self.error(er, "Validation Exception")
 
